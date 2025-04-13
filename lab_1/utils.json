@@ -1,0 +1,16 @@
+{
+	"task_1" : {
+		"plain_text" : { "path" : "task_1/plain_text.txt" },
+		"encrypted_text" : { "path" : "task_1/encrypted_text.txt" },
+		"key" : { "path" : "task_1/key.json" },
+		"alphabet" : { "path" : "task_1/alphabet.json" }
+	},
+
+	"task_2" : {
+		"encrypted_text" : { "path" : "task_2/encrypted_text.txt" },
+		"decrypted_text" : { "path" : "task_2/decrypted_text.txt" },
+		"ru_freq" : { "path" : "task_2/ru_freq.json" },
+		"encrypted_freq" : { "path" : "task_2/encrypted_freq.json" },
+		"mappings" : { "path" : "task_2/mappings.json" }
+	}
+}
