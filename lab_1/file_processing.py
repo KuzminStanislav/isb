@@ -14,7 +14,8 @@ def load_json_data(filename: str) -> dict:
         raise FileNotFoundError(f"Can't find file: {filename}") from e
     except json.JSONDecodeError as e:
         raise json.JSONDecodeError(f"Invalid JSON data in: {filename}") from e
-    
+    except Exception as e:
+        print(f"Error: {e}")
 
 def write_json_data(dict: dict, filename: str) -> None:
     """
@@ -29,6 +30,8 @@ def write_json_data(dict: dict, filename: str) -> None:
         raise OSError(f"Error while writting data to JSON-file: {e}")
     except Exception as e:
         raise RuntimeError(f"Error while processing data: {e}")
+    except Exception as e:
+        print(f"Error: {e}")
 
 
 def read_text(filename: str) -> str:
@@ -42,6 +45,8 @@ def read_text(filename: str) -> str:
             return file.read().strip()
     except FileNotFoundError as e:
         raise FileNotFoundError(f"Can't find file: {filename}") from e
+    except Exception as e:
+        print(f"Error: {e}")
 
 
 def write_to_file(filename: str, content: str) -> None:
@@ -55,3 +60,5 @@ def write_to_file(filename: str, content: str) -> None:
             file.write(content)
     except FileNotFoundError as e:
         raise FileNotFoundError(f"Can't write in file: {filename}") from e
+    except Exception as e:
+        print(f"Error: {e}")
