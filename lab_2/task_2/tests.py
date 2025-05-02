@@ -19,8 +19,7 @@ class NISTTests:
         """
         count_0 = self.bit_seq.count("0")
         count_1 = self.bit_seq.count("1")
-        n = len(self.bit_seq)
-        S_n = abs(count_1 - count_0) / math.sqrt(n)
+        S_n = abs(count_1 - count_0) / math.sqrt(len(self.bit_seq))
         return math.erfc(S_n / math.sqrt(2))
     
 
@@ -101,6 +100,7 @@ class NISTTests:
         """
         hi_square = sum(((observed_counts[i] - 16 * expected_probs[i]) ** 2) / 
                         16 * expected_probs[i] for i in range(len(observed_counts))) 
+        return hi_square
 
     def longest_ones_seq_test(self, probabilities: list[float]) -> float:
         """
