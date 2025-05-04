@@ -5,7 +5,7 @@ import os
 from task_2.tests import NISTTests
     
 
-def load_json_data(path: str) -> dict:
+def load_json_data(path: str) -> tuple[list, list]:
     """
     Load data from JSON file
     :param path: Path to file
@@ -13,17 +13,16 @@ def load_json_data(path: str) -> dict:
     """
     try:
         with open(path, 'r') as file:
-            settings = json.load(file)
-        
-        if "cpp_seq" and "java_seq" not in settings:
-            raise ValueError("Can't find pathes to binary sequences!")
-        
-        if "PI_I" not in settings:
-            raise ValueError("In settings should be list with constants!")
-        
-        return settings
-    except  Exception as e:
-        raise RecursionError(f"Error while loading settings from file: {path}. {str(e)}")
+            data = json.load(file)
+            seq = data.get("seq", [])
+            constants = data.get("constants", [])
+            return seq, constants
+    except FileNotFoundError:
+        print(f"File {path} not found!")
+        return [], []
+    except json.JSONDecodeError:
+        print(f"Error decoding JSON from {path}!")
+        return [], []
     
 
 def read_sequence(path: str) -> list:
@@ -41,10 +40,11 @@ def read_sequence(path: str) -> list:
         raise Exception(f"Error while reading file: {e}")
     
 
-def run_tests(seq: list[str]) -> list:
+def run_tests(seq: list[str], PI_I: list) -> list:
     """
     Run tests and return results
     :param seq: List of binary sequences
+    :param PI_I: Probabilities 
     :return: List of results
     """
     results = []
@@ -53,7 +53,7 @@ def run_tests(seq: list[str]) -> list:
     results.append(f"Result of frequency bit test: {freq_test_result}")
     run_same_result = nist.run_same_bits_test()
     results.append(f"Result of run same bit test: {run_same_result}")
-    longest_one_result = nist.longest_ones_seq_test()
+    longest_one_result = nist.longest_ones_seq_test(PI_I)
     results.append(f"Result of longest one sequency test: {longest_one_result}")
     return results
 
