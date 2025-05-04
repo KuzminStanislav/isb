@@ -5,7 +5,7 @@ import os
 from task_2.tests import NISTTests
     
 
-def load_json_data(path: str) -> tuple[list, list]:
+def load_json_data(path: str) -> tuple[dict, list]:
     """
     Load data from JSON file
     :param path: Path to file
@@ -14,15 +14,14 @@ def load_json_data(path: str) -> tuple[list, list]:
     try:
         with open(path, 'r') as file:
             data = json.load(file)
-            seq = data.get("seq", [])
-            constants = data.get("constants", [])
-            return seq, constants
+            constants = data.get("PI_I", [])
+            return data, constants
     except FileNotFoundError:
         print(f"File {path} not found!")
-        return [], []
+        return {}, []
     except json.JSONDecodeError:
         print(f"Error decoding JSON from {path}!")
-        return [], []
+        return {}, []
     
 
 def read_sequence(path: str) -> list:
@@ -67,12 +66,12 @@ def write_results(path: str, cpp_results: list, java_results: list) -> None:
     """
     try:
         with open(path, "w") as file:
-            path.write("C++ results:\n")
+            file.write("C++ results:\n")
             for results in cpp_results:
-                path.write(results + "\n")
+                file.write(results + "\n")
 
-            path.write("JAVA results:\n")
+            file.write("JAVA results:\n")
             for results in java_results:
-                path.write(results + "\n")
+                file.write(results + "\n")
     except IOError as e:
         raise Exception(f"Error while writing to file: {e}")
