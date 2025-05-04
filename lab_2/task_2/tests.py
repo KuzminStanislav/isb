@@ -43,72 +43,41 @@ class NISTTests:
                             (2 * math.sqrt(2 * n) * zeta * (1 - zeta)))
 
 
-    def count_sequences_in_block(self, block: str) -> int:
-        """
-        Count max sequence of 1 in block
-        :param block: Block of binary sequence
-        :return: Max length of 1 in block
-        """
-        max_len = current_len = 0
-        for bit in block:
-            if bit not in {"0", "1"}:
-                raise ValueError(f"Block contains invalid symbols: '{bit}'")
-            current_len = current_len + 1 if bit == "1" else 0
-            max_len = max(max_len, current_len)
-        return max_len
-    
-
-    def classify_sequence(self, seq_len: int) -> int:
-        """
-        Classify sequences by their lengths
-        :param seq_len: Length of sequence
-        :return: Index of category(0, 1, 2, 3)
-        """
-        match seq_len:
-                case _ if seq_len <= 1:
-                    return 0
-                case 2:
-                    return 1
-                case 3:
-                    return 2
-                case _:
-                    return 3
-            
-
-    def block_process(self, probabilities: list, size: int = 8) -> tuple[int]:
-        """
-        Processing blocks of binary sequences and classify they
-        "param probabilities: Probability for every category
-        :param size: Size of every block
-        :return: Tuple of blocks in every category
-        """
-        v_i = [0] * 4
-        for start_index in range(0, len(self.bit_seq), size):
-            block = self.bit_seq[start_index:start_index + size]
-            max_len = self.count_sequences_in_block(block)
-            category = self.classify_sequence(max_len)
-            v_i[category] += 1
-        return tuple(v_i)
-
-
-    def calculate_hi_square(self, observed_counts: tuple, expected_probs: list) -> list:
-        """
-        Calculate Hi_square between observed and waited values
-        :param observed_counts: Tuple with blocks of every category
-        :param: expected_probs: Probability of every category
-        :return: Hi_square 
-        """
-        hi_square = sum(((observed_counts[i] - 16 * expected_probs[i]) ** 2) / 
-                        16 * expected_probs[i] for i in range(len(observed_counts))) 
-        return hi_square
-
-    def longest_ones_seq_test(self, probabilities: list[float]) -> float:
+    def longest_ones_seq_test(self, PI_I: list[float]) -> float:
         """
         Longest ones sequence test
-        :param probabilities: Probability for every category
+        :param bit_seq: Binary sequence
+        :param PI_I: List of probabilities
         :return: P_value for hi_square
         """
-        v_i = self.block_process(probabilities)
-        hi_square = self.calculate_hi_square(v_i, probabilities)
-        return gammainc(3 / 2, hi_square / 2)
-    
+        M = 8
+        v_i = [0] * 4
+        
+        for i in range(0, len(self.bit_seq), M):
+            block = self.bit_seq[i:i + M]
+            max_len = current_len = 0
+
+            for bit in block:
+                if bit not in {"0", "1"}:
+                    raise ValueError(f"Block contains invalid symbols: '{bit}'")
+                match bit:
+                    case "1":
+                        current_len += 1
+                    case "0":
+                        current_len = 0
+                max_len = max(max_len, current_len)
+            
+            match max_len:
+                case _ if max_len <= 1:
+                    v_i[0] += 1
+                case 2:
+                    v_i[1] += 1
+                case 3:
+                    v_i[2] += 1
+                case _:
+                    v_i[3] += 1
+        
+        hi_square = 0.0
+        for i in range(len(v_i)):
+            hi_square += ((v_i[i] - 16 * PI_I[i]) ** 2) / (16 * PI_I[i])
+        return gammainc(1.5, hi_square / 2)

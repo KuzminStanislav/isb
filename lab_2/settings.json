@@ -1,5 +1,6 @@
 {
-  "cpp_seq" : "task1/cpp_sequence.txt",
-  "java_seq" : "task1/java_sequence.txt",
-  "stats" : "stats.json"
+  "cpp_seq" : "task_1/cpp_sequence.txt",
+  "java_seq" : "task_1/java_sequence.txt",
+  "tests_results" : "task_2/tests_results.txt",
+  "PI_I": [0.2148, 0.3672, 0.2305, 0.1875]
 }

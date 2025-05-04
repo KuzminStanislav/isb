@@ -6,7 +6,6 @@ from PyQt5.QtWidgets import QApplication
 
 from gui import App
 from file_processing import *
-from task_2.tests import NISTTests
 
 
 if __name__ == "__main__":
