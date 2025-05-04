@@ -51,7 +51,7 @@ class App(QWidget):
                                                    options = options)
         if file_path:
             try:
-                self.settings = load_json_data(file_path)
+                self.settings = load_json_data(file_path, _)
                 self.results_text_edit.append(f"Loaded settings from {file_path}.\n")
             except Exception as e:
                 QMessageBox.critical(self, "Error", str(e))
