@@ -10,7 +10,7 @@ from file_module import *
 from serialization import *
 
 
-class CymmetricEncryption:
+class SymmetricEncryption:
     def __init__(self, key_size: int):
         """
         Class initialization
