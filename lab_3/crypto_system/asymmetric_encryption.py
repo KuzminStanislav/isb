@@ -3,8 +3,8 @@ from cryptography.hazmat.primitives import hashes, padding
 from cryptography.hazmat.primitives.asymmetric import rsa
 
 
-from file_module import *
-from serialization import *
+from file_module import FileProcessor
+from serialization import KeyProcessor
 
 
 class AsymmetricEncryption:
@@ -12,9 +12,11 @@ class AsymmetricEncryption:
         """
         Class initialization
         """
-        settings = read_json("settings.json")
-        self.rsa_key_size: int = settings["rsa_key_size"]
-        self.public_exponent: int = settings["public_exponent"]
+        self.file_proc = FileProcessor
+        self.serializor = KeyProcessor
+        self.settings = self.file_proc.read_json("settings.json")
+        self.rsa_key_size: int = self.settings["rsa_key_size"]
+        self.public_exponent: int = self.settings["public_exponent"]
 
 
     def generate_keys(self) -> tuple:
@@ -36,7 +38,8 @@ class AsymmetricEncryption:
         :param private_key: private key
         :param key_path: path to private key
         """
-        serialize_private(private_key, key_path)
+        self.serializor.serialize_private(
+            private_key, key_path)
 
 
     def serialize_public_key(self, public_key, key_path: str) -> None:
@@ -45,7 +48,8 @@ class AsymmetricEncryption:
         :param public_key: public key
         :param key_path: path to public key
         """
-        serialize_public(public_key, key_path)
+        self.serializor.serialize_public(
+            public_key, key_path)
 
 
     def encrypt(self, symmetric_key: bytes, key_path: str) -> bytes:
@@ -54,7 +58,7 @@ class AsymmetricEncryption:
         :param symmetric_key: symmetric key
         :param key_path: path to public key
         """
-        public_key = load_public_key(key_path)
+        public_key = self.serializor.load_public_key(key_path)
         encrypted_key = public_key.encrypt(
             symmetric_key,
             padding.OAEP(
@@ -71,7 +75,7 @@ class AsymmetricEncryption:
         :param encrypted_key: encrypted key
         :param key_path: path to private key
         """
-        private_key = load_private_key(key_path)
+        private_key = self.serializor.load_private_key(key_path)
         symmetric_key = private_key.decrypt(
             encrypted_key,
             padding.OAEP(

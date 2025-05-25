@@ -1,5 +1,5 @@
 from asymmetric_encryption import AsymmetricEncryption
-from file_module import *
+from file_module import FileProcessor
 from symmetric_encryption import SymmetricEncryption
 
 
@@ -36,10 +36,10 @@ class HybridCryptoSystem:
         symmetric_key = self.sym_encryptor.generate_key()
         encrypted_key = self.asym_encryptor.encrypt(symmetric_key, public_path)
 
-        plain_text = read_file(input_path)
+        plain_text = self.read_file(input_path)
         cipher_text = self.sym_encryptor.encrypt(plain_text, symmetric_key)
 
-        write_file(encrypted_path, encrypted_key + cipher_text)
+        self.write_file(encrypted_path, encrypted_key + cipher_text)
 
 
     def decrypt_file(self, encrypted_path: str,
@@ -50,7 +50,7 @@ class HybridCryptoSystem:
         :param private_path: path to private key
         :return: data of encrypted file
         """
-        data = read_file(encrypted_path)
+        data = self.read_file(encrypted_path)
 
         encrypted_key = data[:256]
         cipher_text = data[256:]

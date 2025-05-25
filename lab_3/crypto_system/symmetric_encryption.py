@@ -6,8 +6,8 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
 
-from file_module import *
-from serialization import *
+from file_module import FileProcessor
+from serialization import KeyProcessor
 
 
 class SymmetricEncryption:
@@ -15,8 +15,9 @@ class SymmetricEncryption:
         """
         Class initialization
         """
-        settings = read_json("settings.json")
-        if key_size not in settings["key_size"]:
+        self.file_proc = FileProcessor
+        self.settings = self.file_proc.read_json("settings.json")
+        if key_size not in self.settings["key_size"]:
             raise ValueError("Key length must be 128, 192 or 256!")
         self.key_size: int = key_size // 8
 
