@@ -1,8 +1,0 @@
-C++ results:
-Result of frequency bit test: 0.7236736098317631
-Result of run same bit test: 0.21960199208748463
-Result of longest one sequency test: 0.7988216055906002
-JAVA results:
-Result of frequency bit test: 0.4795001221869535
-Result of run same bit test: 0.8244404469823573
-Result of longest one sequency test: 0.9513170676479453
