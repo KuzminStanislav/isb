@@ -2,36 +2,27 @@ import json
 
 
 class FileProcessor:
-    def __init__(self, path: str = " "):
-        """
-        Class initialization
-        """
-        self.path = path
-
-
-    def read_json(self) -> dict:
+    def read_json(self, path: str) -> dict:
         """
         Read data from JSON file
+        :param path: path to file
         :return: JSON data
         """
         try:
-            with open(self.path, "r") as file:
+            with open(path, "r") as file:
                 return json.load(file)
-        except FileNotFoundError as e:
-            raise FileNotFoundError(f"Can't find file: {filename}") from e
-        except json.JSONDecodeError as e:
-            raise json.JSONDecodeError(f"Invalid JSON data in: {filename}") from e
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Error while loading JSON-data: {e}")
         
 
-    def write_json(self, data: dict) -> None:
+    def write_json(self, path: str, data: dict) -> None:
         """
         Write data to JSON file
+        :param path: path to file
         :param data: JSON data
         """
         try:
-            with open(self.path, "w") as file:
+            with open(path, "w") as file:
                 json.dump(data, file, indent = 4)
         except OSError as e:
             raise OSError(f"Error while writting data to JSON-file: {e}")
@@ -41,30 +32,28 @@ class FileProcessor:
             print(f"Error: {e}")
 
 
-    def read_file(self) -> bytes:
+    def read_file(self, path: str) -> bytes:
         """
         Read file data
+        :param path: path to file
         :return: bytes of data
         """
         try:
-            with open(self.path, "rb") as file:
+            with open(path, "rb") as file:
                 content = file.read()
             return content
-        except FileNotFoundError as e:
-            raise FileNotFoundError(f"Can't find file: {filename}") from e
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Error while reading file: {e}")
 
 
-    def write_file(self, content: bytes) -> None:
+    def write_file(self, path: str, content: bytes) -> None:
         """
         Write data to file
+        :param path: path to file
         :param content: data that is written to file
         """
         try:
-            with open(self.path, "wb") as file:
+            with open(path, "wb") as file:
                 file.write(content)
-        except FileNotFoundError as e:
-            raise FileNotFoundError(f"Can't write in file: {filename}") from e
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Error while writting data to file: {e}")

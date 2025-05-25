@@ -1,10 +1,6 @@
 import argparse
 
 
-from file_module import FileProcessor
-from symmetric_encryption import SymmetricEncryption
-
-
 def parse_arguments() -> tuple:
     """
     Parsing arguments
@@ -22,8 +18,8 @@ def parse_arguments() -> tuple:
                        action='store_true', 
                        help='Started decryption mode')
     parser.add_argument('-k', '--key_size', 
-                        type=int, 
-                        required=True, 
+                        type = int, 
+                        required = True, 
                         help='Length of key: 128, 192, 256')
     return parser.parse_args()
 

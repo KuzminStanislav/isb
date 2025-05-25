@@ -1,0 +1,12 @@
+{
+    "key_size": [128, 192, 256],
+    "rsa_key_size": 2048,
+    "aes_block_size": 16,
+    "public_exponent": 65537,
+    "plain_text": "data/text_data/plain_text.txt",
+    "encrypted_text": "data/text_data/encrypted_text.txt",
+    "decrypted_text": "data/text_data/decrypted_text.txt",
+    "symmetric_key": "data/key_data/symmetric_key.txt",
+    "public_key": "data/key_data/public_key.pem",
+    "private_key": "data/key_data/private_key.pem"
+}

@@ -7,7 +7,6 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
 
 from file_module import FileProcessor
-from serialization import KeyProcessor
 
 
 class SymmetricEncryption:
@@ -15,7 +14,7 @@ class SymmetricEncryption:
         """
         Class initialization
         """
-        self.file_proc = FileProcessor
+        self.file_proc = FileProcessor()
         self.settings = self.file_proc.read_json("settings.json")
         if key_size not in self.settings["key_size"]:
             raise ValueError("Key length must be 128, 192 or 256!")
@@ -62,8 +61,8 @@ class SymmetricEncryption:
         :param key: symmetric key
         :return: decrypted data
         """
-        if not isinstance(plain_text, bytes):
-            raise TypeError("Plain text must be bytes!")
+        if not isinstance(cipher_text, bytes):
+            raise TypeError("Cipher text must be bytes!")
         if not isinstance(key, bytes):
             raise TypeError("Key must be bytes!")
         if len(key) != self.key_size:

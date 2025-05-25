@@ -1,6 +1,6 @@
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import hashes, padding
-from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import rsa, padding
 
 
 from file_module import FileProcessor
@@ -12,8 +12,8 @@ class AsymmetricEncryption:
         """
         Class initialization
         """
-        self.file_proc = FileProcessor
-        self.serializor = KeyProcessor
+        self.file_proc = FileProcessor()
+        self.serializor = KeyProcessor(self.file_proc)
         self.settings = self.file_proc.read_json("settings.json")
         self.rsa_key_size: int = self.settings["rsa_key_size"]
         self.public_exponent: int = self.settings["public_exponent"]
@@ -27,7 +27,7 @@ class AsymmetricEncryption:
         private_key = rsa.generate_private_key(
             public_exponent = self.public_exponent,
             key_size = self.rsa_key_size,
-            backened = default_backend())
+            backend = default_backend())
         public_key = private_key.public_key()
         return private_key, public_key
     
@@ -69,8 +69,8 @@ class AsymmetricEncryption:
         encrypted_key = public_key.encrypt(
             symmetric_key,
             padding.OAEP(
-                mgf = padding.MGF1(algorythm = hashes.SHA256()),
-                algorythm = hashes.SHA256(),
+                mgf = padding.MGF1(algorithm = hashes.SHA256()),
+                algorithm = hashes.SHA256(),
                 label = None)
         )
         return encrypted_key
@@ -83,14 +83,14 @@ class AsymmetricEncryption:
         :param key_path: path to private key
         :return: decrypted data
         """
-        if not isinstance(symmetric_key, bytes) or len(symmetric_key) == 0:
+        if not isinstance(encrypted_key, bytes) or len(encrypted_key) == 0:
             raise ValueError("Symmetric key must not be empty!")
         private_key = self.serializor.load_private_key(key_path)
         symmetric_key = private_key.decrypt(
             encrypted_key,
             padding.OAEP(
-                mgf = padding.MGF1(algorythm = hashes.SHA256()),
-                algorythm = hashes.SHA256(),
+                mgf = padding.MGF1(algorithm = hashes.SHA256()),
+                algorithm = hashes.SHA256(),
                 label = None)
         )
         return symmetric_key

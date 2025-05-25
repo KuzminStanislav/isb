@@ -38,15 +38,13 @@ class HybridCryptoSystem:
         :param encrypted_path: path to encrypted text
         """
         try:
-            self.file_proc.path = input_path
             symmetric_key = self.sym_encryptor.generate_key()
             encrypted_key = self.asym_encryptor.encrypt(symmetric_key, public_path)
 
-            plain_text = self.file_proc.read_file()
+            plain_text = self.file_proc.read_file(input_path)
             cipher_text = self.sym_encryptor.encrypt(plain_text, symmetric_key)
 
-            self.file_proc.path = encrypted_path
-            self.file_proc.write_file(encrypted_key + cipher_text)
+            self.file_proc.write_file(encrypted_path, encrypted_key + cipher_text)
         except Exception as e:
             raise RuntimeError(f"Error while encrypting file: {e}")
 
@@ -60,8 +58,7 @@ class HybridCryptoSystem:
         :return: data of encrypted file
         """
         try:
-            self.file_proc.path = encrypted_path
-            data = self.file_proc.read_file()
+            data = self.file_proc.read_file(encrypted_path)
 
             encrypted_key = data[:256]
             cipher_text = data[256:]

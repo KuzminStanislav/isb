@@ -20,7 +20,9 @@ class KeyProcessor:
         """
         content = private_key.private_bytes(
             encoding = serialization.Encoding.PEM,
-            format = serialization.PrivateFormat.TraditionalOpenSSL)
+            format = serialization.PrivateFormat.TraditionalOpenSSL,
+            encryption_algorithm=serialization.NoEncryption()
+            )
         self.file_proc.write_file(key_path, content)
 
 
@@ -32,7 +34,8 @@ class KeyProcessor:
         """
         content = public_key.public_bytes(
             encoding = serialization.Encoding.PEM,
-            format = serialization.PublicFormat.SubjectPublicKeyInfo)
+            format = serialization.PublicFormat.SubjectPublicKeyInfo
+            )
         self.file_proc.write_file(key_path, content)
 
 
