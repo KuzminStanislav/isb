@@ -38,6 +38,8 @@ class AsymmetricEncryption:
         :param private_key: private key
         :param key_path: path to private key
         """
+        if not key_path or not isinstance(key_path, str):
+            raise ValueError("Key path must not be empty string!")
         self.serializor.serialize_private(
             private_key, key_path)
 
@@ -48,6 +50,8 @@ class AsymmetricEncryption:
         :param public_key: public key
         :param key_path: path to public key
         """
+        if not key_path or not isinstance(key_path, str):
+            raise ValueError("Key path must not be empty string!")
         self.serializor.serialize_public(
             public_key, key_path)
 
@@ -57,7 +61,10 @@ class AsymmetricEncryption:
         Encrypt symmetric key with public RSA
         :param symmetric_key: symmetric key
         :param key_path: path to public key
+        :return: encrypted key
         """
+        if not isinstance(symmetric_key, bytes) or len(symmetric_key) == 0:
+            raise ValueError("Symmetric key must not be empty!")
         public_key = self.serializor.load_public_key(key_path)
         encrypted_key = public_key.encrypt(
             symmetric_key,
@@ -74,7 +81,10 @@ class AsymmetricEncryption:
         Decrypt symmetric key with private RSA
         :param encrypted_key: encrypted key
         :param key_path: path to private key
+        :return: decrypted data
         """
+        if not isinstance(symmetric_key, bytes) or len(symmetric_key) == 0:
+            raise ValueError("Symmetric key must not be empty!")
         private_key = self.serializor.load_private_key(key_path)
         symmetric_key = private_key.decrypt(
             encrypted_key,

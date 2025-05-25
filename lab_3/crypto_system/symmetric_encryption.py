@@ -35,7 +35,15 @@ class SymmetricEncryption:
         Encrypt plain text with symmetric key
         :param plain_text: plain text
         :param key: symmetric key
+        :return: encrypted data
         """
+        if not isinstance(plain_text, bytes):
+            raise TypeError("Plain text must be bytes!")
+        if not isinstance(key, bytes):
+            raise TypeError("Key must be bytes!")
+        if len(key) != self.key_size:
+            raise ValueError(f"Key must be {self.key_size} byte length!")
+        
         iv = os.urandom(16)
         cipher = Cipher(
             algorithms.AES(key),
@@ -52,7 +60,15 @@ class SymmetricEncryption:
         Decrypt cipher text with symmetric key
         :param cipher_text: encrypted text
         :param key: symmetric key
+        :return: decrypted data
         """
+        if not isinstance(plain_text, bytes):
+            raise TypeError("Plain text must be bytes!")
+        if not isinstance(key, bytes):
+            raise TypeError("Key must be bytes!")
+        if len(key) != self.key_size:
+            raise ValueError(f"Key must be {self.key_size} byte length!")
+        
         iv = cipher_text[:16]
         cipher = Cipher(
             algorithms.AES(key),
